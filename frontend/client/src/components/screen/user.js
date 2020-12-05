@@ -7,6 +7,8 @@ const User = () => {
     const [userProfile, setProfile] = useState([])
 
     const { state, dispatch } = useContext(UserContext)
+    console.log(state);
+    console.log('followers', userProfile);
     const localstorage = localStorage.getItem('jwt')
     const { id } = useParams()
     console.log(id);
@@ -16,13 +18,84 @@ const User = () => {
                 "authorization": localstorage.replace(/['"]+/g, '')
             }
         }).then(res => res.json()).then(mypost => {
-
+            console.log(mypost);
             setProfile(mypost);
+
 
 
         })
     }, [])
 
+    const followUser = () => {
+        fetch('/follow', {
+            method: 'Put',
+            headers: {
+                'Content-Type': 'application/json',
+                "authorization": localstorage.replace(/['"]+/g, '')
+            },
+            body: JSON.stringify({
+                followid: id
+            })
+        }).then(res => res.json()).then(data => {
+            console.log(data.following);
+            dispatch({ type: 'update', payload: { followers: data.followers, following: data.following } })
+            localStorage.setItem('user', JSON.stringify(data))
+            //in prev have value of prevasse data stored in setProfile
+            setProfile((prev) => {
+                console.log(prev);
+                return {
+                    // we spread prev bcz in data have only user data
+                    ...prev,
+                    // user:data,
+
+                    user: {
+                        // we spread prev.user bcz in data have value of loggedin user data
+                        ...prev.user,
+                        // append the logged user id in to user(guest) followers section
+                        followers: [...prev.user.followers, data._id]
+                    }
+                }
+
+            })
+
+        })
+    }
+
+
+    const unfollowUser = () => {
+        fetch('/unfollow', {
+            method: 'put',
+            headers: {
+                'Content-Type': 'application/json',
+                "authorization": localstorage.replace(/['"]+/g, '')
+            },
+            body: JSON.stringify({
+                unfollowid: id
+            })
+        }).then(res => res.json()).then(data => {
+            console.log(data);
+            dispatch({ type: 'update', payload: { following: data.following, followers: data.followers } })
+            localStorage.setItem('user', JSON.stringify(data))
+            setProfile((prev) => {
+                console.log(prev);
+                const newFollower = prev.user ? prev.user.followers.filter(item => item !== data._id) : console.log(null);
+                console.log(newFollower);
+                return {
+                    // we spread prev bcz in data have only user data
+                    ...prev,
+                    // user:data,
+
+                    user: {
+                        // we spread prev.user bcz in data have value of loggedin user data
+                        ...prev.user,
+                        // append the logged user id in to user(guest) followers section
+                        followers: newFollower
+                    }
+                }
+
+            })
+        })
+    }
 
 
     return (
@@ -47,8 +120,19 @@ const User = () => {
                         width: '108%',
                     }} */>
                         <h5>{userProfile.posts ? userProfile.posts.length : 0} Posts</h5>
-                        <h5>40 followers</h5>
-                        <h5>40 following</h5>
+                        <h5>{userProfile.user ? userProfile.user.followers.length : 'Loading'} followers</h5>
+                        <h5>{userProfile.user ? userProfile.user.following.length : 'Loading'} following</h5>
+                        {userProfile.user ? userProfile.user.followers.includes(state._id) ?
+                            <button className='btn' style={{ color: 'black', background: '#f6f5f4' }}
+                                onClick={() => unfollowUser()}>
+                                unfollow
+                    </button> :
+                            <button className='btn waves-effect waves-light #64b5f6 blue darken-1'
+                                onClick={() => followUser()}>
+                                follow
+                    </button> : <h1>Loading</h1>
+                        }
+
                     </div>
                 </div>
             </div>

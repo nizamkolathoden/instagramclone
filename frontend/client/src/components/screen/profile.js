@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { UserContext } from '../../App'
 function Profile(props) {
     const [pics, setPics] = useState([]);
-    
+
     const { state, dispatch } = useContext(UserContext)
     const localstorage = localStorage.getItem('jwt')
     useEffect(() => {
@@ -13,10 +13,26 @@ function Profile(props) {
         }).then(res => res.json()).then(mypost => {
             console.log(mypost.sucess);
             setPics(mypost.sucess)
-            
+           
         })
     }, [])
-
+    
+    const deletePost = (id) => {
+        fetch(`/deletepost/${id}`, {
+          method: 'delete',
+          headers: {
+            "authorization": localstorage.replace(/['"]+/g, '')
+          },
+    
+        }).then(res => res.json())
+          .then(result => {
+            const newData = pics.filter(item => {
+              return item._id !== result.sucess._id
+            })
+            setPics(newData)
+            console.log(result);
+          })
+      }
 
     return (
         <div>
@@ -40,8 +56,8 @@ function Profile(props) {
                         width: '108%',
                     }} */>
                         <h5>{pics.length} posts</h5>
-                        <h5>40 followers</h5>
-                        <h5>40 following</h5>
+                        <h5>{state ? state.followers.length : 'Loading'} followers</h5>
+                        <h5>{state ? state.following.length : 'Loading'} following</h5>
                     </div>
                 </div>
             </div>
@@ -52,7 +68,8 @@ function Profile(props) {
                         return (
                             <>
                                 <div className='card home-card'>
-                                    <h5>{data.title}</h5>
+                                    <h5>{data.title} {data.postedBy._id == state._id ? <i className="material-icons" style={{ float: "right", cursor: 'pointer' }}
+                  onClick={() => deletePost(data._id)}>delete</i> : ''} </h5>
                                     <div className='card-image'>
                                         <img alt='sorry'
                                             src={data.photo} />

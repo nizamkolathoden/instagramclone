@@ -139,17 +139,21 @@ router.delete('/deletecomment/:commentid', requirelogin, (req, res) => {
     //we will get post Id in req.body.postId so we will get post
     Post.findByIdAndUpdate(req.body.postId, {
         //we will be remove comments using comments_id
-        $pull: { comments :
-            {_id: 
-                req.params.commentid }}
+        $pull: {
+            comments:
+            {
+                _id:
+                    req.params.commentid
+            }
+        }
 
 
     }, {
         //we adding new data its actually updatin existing data it will be show only updated data
         new: true
-    }).populate('postedBy','_id name')
-    .populate('comments.postedBy','name _id')
-     .exec((err, result) => {
+    }).populate('postedBy', '_id name')
+        .populate('comments.postedBy', 'name _id')
+        .exec((err, result) => {
             if (err) return res.status(422).json({ error_in_like: err })
             else res.json({ sucess: result })
         })

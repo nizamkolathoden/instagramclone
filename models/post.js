@@ -12,21 +12,21 @@ const postSchema = new mongoose.Schema({
     },
     photo: {
         type: String,
-        required:true
+        required: true
     },
     postedBy: {
         type: ObjectId,
         ref: "user"
     },
-    likes:[{
-        type:ObjectId,
-        ref:'user'
+    likes: [{
+        type: ObjectId,
+        ref: 'user'
     }],
-    comments:[{
-        text:String,
-        postedBy:{
-            type:ObjectId,
-            ref:'user'
+    comments: [{
+        text: String,
+        postedBy: {
+            type: ObjectId,
+            ref: 'user'
         }
     }]
 })

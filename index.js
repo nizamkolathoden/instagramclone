@@ -1,7 +1,7 @@
 
 const express = require("express");
 const app = express()
-const port = 8000
+const port = process.env.port|| 8000
 const mongoose = require("mongoose")
 const { MONGOURI } = require('./key')
 //middle ware

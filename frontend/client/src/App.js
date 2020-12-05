@@ -14,6 +14,7 @@ import { reducer, intialState } from './reducers/userReducer'
 //create context
 export const UserContext = createContext()
 const Routing = () => {
+    // we use useContext for we want to acess state and dispatch
       const { state, dispatch } = useContext(UserContext);
       const history = useHistory()
       useEffect(() => {

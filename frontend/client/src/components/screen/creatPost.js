@@ -52,22 +52,22 @@ function CreatPost(props) {
     const PostDetials = () => {
         //formdata object ||Currently its empty and more clarification go and read mozila doc you will understand much more about Formdata()
         const data = new FormData()
-       
+
         //append the image with key value pair image is above const image 
         data.append('file', image)
-       
+
         //put name of cloud upload/project name read cloudinary docs
         data.append('upload_preset', "insta_clone");
-       
+
         //put name of cloud 
         data.append('cloud_name', "dnkybekht")
-       
+
         //cloud base api insted fetch you can use axios like 3rd party libary
         fetch(" https://api.cloudinary.com/v1_1/dnkybekht/image/upload", {
             method: "post",
             body: data
         }).then(res => res.json()).then(data => {
-           //console.log(data);
+            //console.log(data);
             setUrl(data.url)
             console.log("url", data.url);
         }).catch(e => console.log('error in upload', e))
