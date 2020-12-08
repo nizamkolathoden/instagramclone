@@ -11,8 +11,9 @@ function Navbar(props) {
       return [
         <li key={1}><Link to="/profile">Profile</Link></li>,
         <li key={2}><Link to="/create">CreatePost</Link></li>,
+        <li key={3}><Link to="/followingspost">followingspost</Link></li>,
 
-        <li key={3}><i style={{ float: 'right', color: '#000', cursor: 'pointer' }} className="material-icons"
+        <li key={4}><i style={{ float: 'right', color: '#000', cursor: 'pointer' }} className="material-icons"
 
           onClick={() => {
             localStorage.clear()
@@ -26,8 +27,8 @@ function Navbar(props) {
       ]
     } else {
       return [
-        <li key={4}><Link to="/login">Login</Link></li>,
-        <li key={5}><Link to="/signup">SignUp</Link></li>
+        <li key={5}><Link to="/login">Login</Link></li>,
+        <li key={6}><Link to="/signup">SignUp</Link></li>
       ]
     }
   }

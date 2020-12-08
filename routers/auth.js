@@ -71,9 +71,10 @@ router.post("/login",(req,res)=>{
                         const token = jwt.sign({_id:savedUser._id},JWT_SECRET)
                         //return res.json({message:token})
                         //fetch name email and id from savedUser(saved user is comming from database not in tocken) 
-                        const{_id,email,name} = savedUser;
+                        const{_id,email,name,followers,following} = savedUser;
                         //pass tocken and user to frontend/responce
-                        res.json({token,user:{_id,name,email}})
+                        //we pass followers and following for fix bug when we loged out now it solved
+                        res.json({token,user:{_id,name,email,followers,following}})
 
                     }else res.status(422).json({error:"invalid email or Password"})
                 }).catch(e=>{

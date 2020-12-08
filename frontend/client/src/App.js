@@ -9,6 +9,7 @@ import Profile from './components/screen/profile';
 import Signup from './components/screen/signup';
 import Login from './components/screen/login';
 import User from './components/screen/user';
+import Followingpost from './components/screen/Followingpost'
 import CreatePost from './components/screen/creatPost';
 import { reducer, intialState } from './reducers/userReducer'
 //create context
@@ -50,6 +51,10 @@ const Routing = () => {
                   </Route>
                   <Route path="/profile/:id">
                         <User />
+                  </Route>
+
+                  <Route path="/followingspost">
+                        <Followingpost />
                   </Route>
             </Switch>
       )

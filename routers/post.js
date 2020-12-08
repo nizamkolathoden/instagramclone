@@ -160,4 +160,19 @@ router.delete('/deletecomment/:commentid', requirelogin, (req, res) => {
 
 })
 
+router.get("/followingspost", requirelogin, (req, res) => {
+    //if postedBy is presented in following list it return ($in read mongodb docs)
+    Post.find({postedBy:{$in:req.user.following}})
+        //pouplate postedBy
+        .populate("postedBy", "_id name")
+        .populate("comments.postedBy", "_id name")
+        .populate('likes')
+
+        .then(posts => {
+            res.json({ sucess: posts });
+
+        }).catch(e => console.log("error in allpost:", e))
+})
+
+
 module.exports = router
